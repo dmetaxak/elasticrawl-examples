@@ -351,6 +351,9 @@ public class WarcRecord {
     }
     
     public void readFields(DataInput in) throws IOException {
+      LOG.info("****************************");
+      LOG.info("DataInput: " + in);
+      LOG.info("****************************");
       contentType=in.readUTF();
       UUID=in.readUTF();
       dateString=in.readUTF();
@@ -359,6 +362,7 @@ public class WarcRecord {
       int numMetaItems=in.readInt();
       for (int i=0; i < numMetaItems; i++) {
         String thisKey=in.readUTF();
+        // TODO oops i'm kinda fucked - no idea where the URL goes??
         String thisValue=in.readUTF();
         metadata.put(thisKey, thisValue);
       }
@@ -388,6 +392,7 @@ public class WarcRecord {
       
       retBuffer.append("Content-Type: " + contentType + LINE_ENDING);
       retBuffer.append("Content-Length: " + contentLength + LINE_ENDING);
+      
       
       return retBuffer.toString();
     }
@@ -439,7 +444,7 @@ public class WarcRecord {
   public void setWarcUUID(String UUID) {
     warcHeader.UUID=UUID;
   }
-  
+    
   public void addHeaderMetadata(String key, String value) {
     //System.out.println("+-- WarRecord.addHeaderMetadata key=" + key + " value=" + value);
     // don't allow addition of known keys
